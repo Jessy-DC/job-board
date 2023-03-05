@@ -1,9 +1,13 @@
+import type { NextPage } from 'next';
+import {JobList} from "@/components/JobList";
 import {Layout} from "@/components/Layout";
 
-export default function Home() {
+const Home: NextPage = () => {
   return (
     <Layout>
-        <p>Welcome !</p>
+        <JobList />
     </Layout>
   )
 }
+
+export default Home;

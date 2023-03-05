@@ -1,0 +1,23 @@
+import {Job, JobSummary, toJobSummary, toJob} from "./jobs";
+import {readFile} from "fs/promises";
+import {join} from "path";
+import {GetJobsOptions} from "@/pages/api/jobs";
+
+const readJobsFromJson = async (): Promise<Job[]> => {
+    const json = await readFile(join(process.cwd(), 'data', '../jobs.json'), 'utf-8');
+    return (JSON.parse(json) as Job[]).map(toJob);
+}
+
+export const getJobs = async ({
+    page = 1,
+    jobTitle,
+    company
+}: GetJobsOptions): Promise<JobSummary[]> => {
+    const jobs = await readJobsFromJson();
+    const stringMatches = (str: string, searched: string | undefined) => !searched || str.toLowerCase().includes(searched.toLowerCase());
+    return jobs
+        .map(toJobSummary)
+        .filter(job => stringMatches(job.jobTitle, jobTitle) && stringMatches(job.company, company))
+        .sort((first, second) => second.date.valueOf() - first.date.valueOf())
+        .slice((page - 1) * 10, page * 10);
+}
