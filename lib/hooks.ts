@@ -1,11 +1,17 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import type { JobSummary } from "@/lib/jobs";
 
-export const useJobs = (page?: number, jobTitle?: string, company?: string) => {
+export const useJobs = (initialJobs: JobSummary[], page?: number, jobTitle?: string, company?: string) => {
     const [jobs, setJobs] = useState<JobSummary[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const isFirstRef = useRef(true);
+
     useEffect(() => {
+        if(isFirstRef.current === true) {
+            isFirstRef.current = false;
+            return;
+        }
         let query = [];
 
         if(page !== undefined) {
