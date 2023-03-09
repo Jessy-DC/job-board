@@ -1,7 +1,6 @@
-import {formatDate} from '@/lib/dates';
+import {formatDate} from '../lib/dates';
 import {useJobs} from "@/lib/hooks";
 import {useState} from "react";
-import Link from "next/link";
 
 export const JobList = () => {
     const [page, setPage] = useState(1);
@@ -33,9 +32,7 @@ export const JobList = () => {
                 <ul>
                     {jobs.map((job) => (
                         <li key={job.id}>
-                            <Link href={`/jobs/${job.id}`}>
-                                <strong>{job.jobTitle}</strong> at <em>{job.company}</em> {' '}
-                            </Link>
+                            <strong>{job.jobTitle}</strong> at <em>{job.company}</em> {' '}
                             <small>{formatDate(job.date)}</small>
                         </li>
                     ))}
