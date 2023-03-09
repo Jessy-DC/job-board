@@ -1,12 +1,6 @@
-import type {GetServerSideProps, NextPage} from 'next';
+import type { NextPage } from 'next';
 import {JobList} from "@/components/JobList";
 import {Layout} from "@/components/Layout";
-import {
-    deserializeJobSummary,
-    SerializedJobSummary,
-    serializeJobSummary,
-} from "@/lib/jobs";
-import {getJobs} from "@/lib/jobs_server";
 
 const Home: NextPage<Props> = ({initialJobs: serializedInitialJobs}) => {
     const initialJobs = serializedInitialJobs.map(deserializeJobSummary);
@@ -28,6 +22,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
             initialJobs: initialJobs.map(serializeJobSummary)
         }
     }
+const Home: NextPage = () => {
+  return (
+    <Layout>
+        <JobList />
+    </Layout>
+  )
 }
 
 export default Home;

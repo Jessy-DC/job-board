@@ -2,17 +2,12 @@ import {formatDate} from '@/lib/dates';
 import {useJobs} from "@/lib/hooks";
 import {useState} from "react";
 import Link from "next/link";
-import {JobSummary} from "@/lib/jobs";
 
-export interface Props {
-    initialJobs: JobSummary[]
-}
-
-export const JobList = ({initialJobs}: Props) => {
+export const JobList = () => {
     const [page, setPage] = useState(1);
     const [company, setCompany] = useState('');
     const [jobTitle, setJobTitle] = useState('');
-    const {loading, error, jobs} = useJobs(initialJobs, page, jobTitle, company);
+    const {loading, error, jobs} = useJobs(page, jobTitle, company);
 
     return (
         <>
