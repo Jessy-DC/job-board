@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import {JobList} from "@/components/JobList";
 import {Layout} from "@/components/Layout";
 
+<<<<<<< HEAD
 const Home: NextPage<Props> = ({initialJobs: serializedInitialJobs}) => {
     const initialJobs = serializedInitialJobs.map(deserializeJobSummary);
     return (
@@ -22,6 +23,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
             initialJobs: initialJobs.map(serializeJobSummary)
         }
     }
+=======
+>>>>>>> parent of c4bd79d (Filled jobs with GetServerSideProps)
 const Home: NextPage = () => {
   return (
     <Layout>
