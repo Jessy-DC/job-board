@@ -27,3 +27,15 @@ export const deserializeJobSummary = (
     ...serializedJobSummary,
     date: new Date(serializedJobSummary.date),
 })
+
+export type SerializedJob = ReturnType<typeof serializeJob>;
+
+export const serializeJob = (job: Job) => ({
+    ...job,
+    date: job.date.toISOString(),
+});
+
+export const deserializeJob = (serializedJob: SerializedJob): Job => ({
+    ...serializedJob,
+    date: new Date(serializedJob.date),
+});
