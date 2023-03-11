@@ -1,4 +1,4 @@
-import {GetServerSideProps ,NextPage} from "next";
+import {GetStaticPaths, GetStaticProps, NextPage} from "next";
 import {useRouter} from "next/router";
 import {Layout} from "@/components/Layout";
 import {
@@ -13,8 +13,6 @@ import {formatDate} from "@/lib/dates";
 
 const JobPage: NextPage<Props> = ({job: serializeJob}) => {
     const job = deserializeJob(serializeJob);
-    const router = useRouter();
-    const jobId = router.query.id;
 
     return (
         <Layout title={`${job.jobTitle} at ${job.company}`}>
@@ -41,7 +39,7 @@ export interface Props {
     job: SerializedJob;
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const job = await getJob(context.params!.id as string);
     if (!job) {
         return {
@@ -52,6 +50,13 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         props: {
             job: serializeJob(job)
         }
+    }
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: 'blocking'
     }
 }
 

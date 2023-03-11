@@ -1,28 +1,30 @@
-import {Job, JobSummary, toJobSummary, toJob} from "./jobs";
-import {readFile} from "fs/promises";
-import {join} from "path";
+import {JobSummary} from "./jobs";
 import {GetJobsOptions} from "@/pages/api/jobs";
+import {Job} from '@prisma/client';
+import prisma from "./prisma_server";
 
-const readJobsFromJson = async (): Promise<Job[]> => {
-    const json = await readFile(join(process.cwd(), 'data', '../jobs.json'), 'utf-8');
-    return (JSON.parse(json) as Job[]).map(toJob);
-}
-
-export const getJobs = async ({
+export async function getJobs({
     page = 1,
     jobTitle,
     company
-}: GetJobsOptions): Promise<JobSummary[]> => {
-    const jobs = await readJobsFromJson();
-    const stringMatches = (str: string, searched: string | undefined) => !searched || str.toLowerCase().includes(searched.toLowerCase());
-    return jobs
-        .map(toJobSummary)
-        .filter(job => stringMatches(job.jobTitle, jobTitle) && stringMatches(job.company, company))
-        .sort((first, second) => second.date.valueOf() - first.date.valueOf())
-        .slice((page - 1) * 10, page * 10);
+}: GetJobsOptions): Promise<JobSummary[]> {
+    return prisma.job.findMany({
+        select: {id: true, jobTitle: true, company: true, date: true},
+        where: {
+            jobTitle: {
+                contains: jobTitle, mode: 'insensitive'
+            },
+            company: {
+                contains: company, mode: 'insensitive'
+            }
+        },
+        orderBy: {date: 'desc'},
+        skip: (page - 1) * 10,
+        take: 10,
+    })
 }
 
 export const getJob = async (id: string): Promise<Job | undefined> => {
-    const jobs = await readJobsFromJson();
-    return jobs.find(job => job.id === id);
+    const job = await prisma.job.findUnique({where: {id}});
+    return job ?? undefined;
 }

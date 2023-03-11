@@ -22,7 +22,7 @@ export interface Props {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-    const initialJobs = await getJobs({page: 1});
+    const initialJobs = await getJobs({});
     return {
         props: {
             initialJobs: initialJobs.map(serializeJobSummary)
