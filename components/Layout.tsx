@@ -1,4 +1,5 @@
 import {PropsWithChildren} from "react";
+import {AuthMenu} from "@/components/AuthMenu";
 import Link from "next/link";
 
 export interface Props {
@@ -12,7 +13,8 @@ export const Layout = ({title, children}: PropsWithChildren<Props>) => {
             <header>
                 <h1>My Job Board</h1>
                 <nav>
-                    <Link href="/">Home</Link> | <Link href="/about">About</Link>
+                    <Link href="/">Home</Link> | <Link href="/about">About</Link> {' '}
+                    <AuthMenu />
                 </nav>
             </header>
             <main>
