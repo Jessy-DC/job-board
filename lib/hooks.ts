@@ -12,11 +12,9 @@ const fetchUser = async(status: 'loading' | 'authenticated' | 'unauthenticated')
     return null
 }
 
-const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then(res => res.json());
-
 export const useCurrentUser = () => {
     const {status} = useSession();
-    const {data: user} = useSWR<User | null>('/api/me', fetcher);
+    const {data: user} = useSWR<User | null>('/api/me', fetchUser);
     if (user === undefined) {
         return {loading: true, user: null};
     }
