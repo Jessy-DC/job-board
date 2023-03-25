@@ -1,19 +1,16 @@
 import {GetStaticPaths, GetStaticProps, NextPage} from "next";
 import {User} from "@prisma/client";
+import {useCurrentUser} from "@/lib/hooks";
 import {Layout} from "@/components/Layout";
-import {
-    getJob
-} from "@/lib/jobs_server";
-import {
-    deserializeJob,
-    SerializedJob,
-    serializeJob
-} from "@/lib/jobs";
+import {getJob} from "@/lib/jobs_server";
+import {deserializeJob, SerializedJob, serializeJob} from "@/lib/jobs";
 import {formatDate} from "@/lib/dates";
+import Link from "next/link";
 
 const JobPage: NextPage<Props> = ({job: serializeJob, user}) => {
+    const {user: currentUser} = useCurrentUser();
     const job = deserializeJob(serializeJob);
-
+    const isOwner = currentUser && currentUser.id === job.userId;
     return (
         <Layout title={`${job.jobTitle} at ${job.company}`}>
             <h2>{job.jobTitle}</h2>
@@ -26,6 +23,12 @@ const JobPage: NextPage<Props> = ({job: serializeJob, user}) => {
                         <>
                             {' '}
                             by {user.name}
+                        </>
+                    )}
+                    {isOwner && (
+                        <>
+                            {' '}
+                            <Link href={`/private/${job.id}/delete`}>Delete</Link>
                         </>
                     )}
                 </small>

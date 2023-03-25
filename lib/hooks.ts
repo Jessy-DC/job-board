@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import type {JobSummary} from "@/lib/jobs";
 import useSWR from "swr";
-import {User} from "@prisma/client";
+import {User} from '@prisma/client';
 import {useSession} from "next-auth/react";
 
 const fetchUser = async(status: 'loading' | 'authenticated' | 'unauthenticated') => {
