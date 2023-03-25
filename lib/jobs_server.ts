@@ -1,13 +1,13 @@
 import {JobSummary} from "./jobs";
 import {GetJobsOptions} from "@/pages/api/jobs";
-import {Job} from '@prisma/client';
+import {Job, User} from '@prisma/client';
 import prisma from "./prisma_server";
 
 export async function getJobs({
-    page = 1,
-    jobTitle,
-    company
-}: GetJobsOptions): Promise<JobSummary[]> {
+                                  page = 1,
+                                  jobTitle,
+                                  company
+                              }: GetJobsOptions): Promise<JobSummary[]> {
     return prisma.job.findMany({
         select: {id: true, jobTitle: true, company: true, date: true},
         where: {
@@ -24,7 +24,7 @@ export async function getJobs({
     })
 }
 
-export const getJob = async (id: string): Promise<Job | undefined> => {
-    const job = await prisma.job.findUnique({where: {id}});
+export const getJob = async (id: string): Promise<(Job & { user: User | null }) | undefined> => {
+    const job = await prisma.job.findUnique({where: {id}, include: {user: true}});
     return job ?? undefined;
 }

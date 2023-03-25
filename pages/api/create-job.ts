@@ -1,7 +1,7 @@
 import {NextApiHandler} from "next";
-import {getToken} from "next-auth/jwt";
 import {JobFormValues, validateJobFormValues} from "@/lib/jobForm";
 import prisma from "@/lib/prisma_server";
+import {getCurrentUser} from "@/lib/user_server";
 
 const handle: NextApiHandler = async (req, res) => {
     if(req.method !== "POST") {
@@ -9,8 +9,8 @@ const handle: NextApiHandler = async (req, res) => {
         return;
     }
 
-    const token = await getToken({req});
-    if(!token) {
+    const user = await getCurrentUser({req});
+    if(!user) {
         res.status(401).send({ok: false})
         return;
     }
@@ -28,7 +28,8 @@ const handle: NextApiHandler = async (req, res) => {
             jobTitle: values.jobTitle,
             company: values.company,
             description: values.description,
-            applyUrl: values.applyUrl
+            applyUrl: values.applyUrl,
+            userId: user.id,
         },
     });
 

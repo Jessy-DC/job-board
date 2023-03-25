@@ -1,6 +1,6 @@
 import {Job} from '@prisma/client';
 
-export type JobSummary = Omit<Job, 'applyUrl' | 'description'>;
+export type JobSummary = Omit<Job, 'applyUrl' | 'description' | 'userId'>;
 
 export type SerializedJobSummary = ReturnType<typeof serializeJobSummary>
 export const serializeJobSummary = (jobSummary: JobSummary) => ({

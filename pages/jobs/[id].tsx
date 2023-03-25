@@ -1,4 +1,5 @@
 import {GetStaticPaths, GetStaticProps, NextPage} from "next";
+import {User} from "@prisma/client";
 import {Layout} from "@/components/Layout";
 import {
     getJob
@@ -10,7 +11,7 @@ import {
 } from "@/lib/jobs";
 import {formatDate} from "@/lib/dates";
 
-const JobPage: NextPage<Props> = ({job: serializeJob}) => {
+const JobPage: NextPage<Props> = ({job: serializeJob, user}) => {
     const job = deserializeJob(serializeJob);
 
     return (
@@ -20,7 +21,14 @@ const JobPage: NextPage<Props> = ({job: serializeJob}) => {
                 <strong>{job.company}</strong>
             </p>
             <p>
-                <small>Posted on {formatDate(job.date)}</small>
+                <small>Posted on {formatDate(job.date)}
+                    {user && (
+                        <>
+                            {' '}
+                            by {user.name}
+                        </>
+                    )}
+                </small>
             </p>
             {job.description.split('\n').map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
@@ -36,18 +44,21 @@ const JobPage: NextPage<Props> = ({job: serializeJob}) => {
 
 export interface Props {
     job: SerializedJob;
+    user: User | null;
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-    const job = await getJob(context.params!.id as string);
-    if (!job) {
+    const jobWithUser = await getJob(context.params!.id as string);
+    if (!jobWithUser) {
         return {
             notFound: true,
         };
     }
+    const {user, ...job} = jobWithUser;
     return {
         props: {
-            job: serializeJob(job)
+            job: serializeJob(job),
+            user
         }
     }
 }

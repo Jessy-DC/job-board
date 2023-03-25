@@ -1,7 +1,7 @@
 import {Job} from '@prisma/client';
 import {FormikErrors} from 'formik';
 
-export type JobFormValues = Omit<Job, 'id' | 'date'>
+export type JobFormValues = Omit<Job, 'id' | 'date' | 'userId'>
 
 export const validateJobFormValues = (values: JobFormValues) => {
     const errors: FormikErrors<JobFormValues> = {};
