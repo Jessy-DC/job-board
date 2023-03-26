@@ -23,6 +23,7 @@ export const AuthMenu = () => {
             <a href="#" onClick={() => signOut({callbackUrl: "/"})}>
                 Sign out
             </a>
+            )
         </>
     )
 }

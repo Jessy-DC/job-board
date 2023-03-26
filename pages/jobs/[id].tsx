@@ -28,7 +28,8 @@ const JobPage: NextPage<Props> = ({job: serializeJob, user}) => {
                     {isOwner && (
                         <>
                             {' '}
-                            <Link href={`/private/${job.id}/delete`}>Delete</Link>
+                            <Link href={`/private/${job.id}/delete`}>Delete</Link> {''}
+                            <Link href={`/private/${job.id}/edit`}>Edit</Link>
                         </>
                     )}
                 </small>
